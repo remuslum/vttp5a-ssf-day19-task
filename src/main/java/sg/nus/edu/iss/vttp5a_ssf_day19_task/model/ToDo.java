@@ -1,6 +1,6 @@
 package sg.nus.edu.iss.vttp5a_ssf_day19_task.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotBlank;
@@ -15,15 +15,15 @@ public class ToDo {
 
     @Size(min = 3, max = 255, message = "Description must be between 3-255 characters")
     private String description;
-    
-    private LocalDateTime dueDate;
+
+    private LocalDate dueDate;
     private String priority;
     private String status;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private LocalDate createdAt;
+    private LocalDate updatedAt;
 
-    public ToDo(String name, String description, LocalDateTime dueDate, String priority, String status,
-            LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public ToDo(String name, String description, LocalDate dueDate, String priority, String status,
+            LocalDate createdAt, LocalDate updatedAt) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.description = description;
@@ -34,8 +34,8 @@ public class ToDo {
         this.updatedAt = updatedAt;
     }
 
-    public ToDo(String id, String name, String description, LocalDateTime dueDate, String priority, String status,
-            LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public ToDo(String id, String name, String description, LocalDate dueDate, String priority, String status,
+            LocalDate createdAt, LocalDate updatedAt) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -70,11 +70,11 @@ public class ToDo {
         this.description = description;
     }
 
-    public LocalDateTime getDueDate() {
+    public LocalDate getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDateTime dueDate) {
+    public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -94,19 +94,19 @@ public class ToDo {
         this.status = status;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public LocalDate getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public LocalDate getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(LocalDate updatedAt) {
         this.updatedAt = updatedAt;
     }
 

@@ -6,9 +6,11 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
+import jakarta.annotation.PostConstruct;
 import sg.nus.edu.iss.vttp5a_ssf_day19_task.constants.Constants;
 
 @Repository
@@ -17,32 +19,39 @@ public class MapRepo {
     @Qualifier(Constants.TEMPLATE01)
     RedisTemplate<String, String> redisTemplate;
 
-    public void create(String redisKey, String hashKey, String hashValue){
-        redisTemplate.opsForHash().put(redisKey, hashKey, hashValue);
+    HashOperations<String, String, String> hashOperations;
+
+    @PostConstruct
+    public void init(){
+        hashOperations = redisTemplate.opsForHash();
     }
 
-    public Object get(String redisKey, String hashKey){
-        return redisTemplate.opsForHash().get(redisKey, hashKey);
+    public void create(String redisKey, String hashKey, String hashValue){
+        hashOperations.put(redisKey, hashKey, hashValue);
+    }
+
+    public String get(String redisKey, String hashKey){
+        return hashOperations.get(redisKey, hashKey);
     }
 
     public long delete(String redisKey, String hashKey){
-        return redisTemplate.opsForHash().delete(redisKey, hashKey);
+        return hashOperations.delete(redisKey, hashKey);
     }
 
     public boolean keyExists(String redisKey, String hashKey){
-        return redisTemplate.opsForHash().hasKey(redisKey, hashKey);
+        return hashOperations.hasKey(redisKey, hashKey);
     }
 
-    public Map<Object, Object> getEntries(String redisKey){
-        return redisTemplate.opsForHash().entries(redisKey);
+    public Map<String, String> getEntries(String redisKey){
+        return hashOperations.entries(redisKey);
     }
 
-    public Set<Object> getKeys(String redisKey){
-        return redisTemplate.opsForHash().keys(redisKey);
+    public Set<String> getKeys(String redisKey){
+        return hashOperations.keys(redisKey);
     }
 
     public long size(String redisKey){
-        return redisTemplate.opsForHash().size(redisKey);
+        return hashOperations.size(redisKey);
     }
 
     public void exprie(String redisKey, Integer expireValue){
