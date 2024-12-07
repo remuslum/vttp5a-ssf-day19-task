@@ -22,16 +22,19 @@ public class ToDo {
     private LocalDate createdAt;
     private LocalDate updatedAt;
 
-    public ToDo(String name, String description, LocalDate dueDate, String priority, String status,
-            LocalDate createdAt, LocalDate updatedAt) {
+    public ToDo(){
+        
+    }
+
+    public ToDo(String name, String description, LocalDate dueDate, String priority, String status) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.description = description;
         this.dueDate = dueDate;
         this.priority = priority;
         this.status = status;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.createdAt = LocalDate.now();
+        this.updatedAt = LocalDate.now();
     }
 
     public ToDo(String id, String name, String description, LocalDate dueDate, String priority, String status,

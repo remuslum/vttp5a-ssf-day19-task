@@ -16,6 +16,7 @@ import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 import sg.nus.edu.iss.vttp5a_ssf_day19_task.constants.Constants;
+import sg.nus.edu.iss.vttp5a_ssf_day19_task.model.LocalDateConverter;
 import sg.nus.edu.iss.vttp5a_ssf_day19_task.repo.MapRepo;
 
 @Service
@@ -30,13 +31,15 @@ public class FileReaderService {
             JsonReader jsonReader = Json.createReader(fis);
             JsonArray jArray = jsonReader.readArray();
 
+            LocalDateConverter localDateConverter = new LocalDateConverter();
+
             for(int i = 0; i < jArray.size(); i++){
                 JsonObject jObject = jArray.getJsonObject(i);
 
                 JsonObject jObjectToSave = Json.createObjectBuilder().add("id", jObject.getString("id"))
                 .add("name", jObject.getString("name")).add("description", jObject.getString("description"))
                 .add("due_date", convertStringDateToLong(jObject.getString("due_date"))).add("priority_value", jObject.getString("priority_level"))
-                .add("status", jObject.getString("status")).add("created_at", convertStringDateToLong(jObject.getString("created_at")))
+                .add("status", jObject.getString("status")).add("created_at", localDateConverter.convertStringDateToLong(jObject.getString("created_at")))
                 .add("updated_at", convertStringDateToLong(jObject.getString("updated_at"))).build();
 
                 mapRepo.create(Constants.REDISKEY, jObjectToSave.getString("id"), jObjectToSave.toString());
@@ -45,7 +48,6 @@ public class FileReaderService {
         } catch(FileNotFoundException e){
             e.printStackTrace();
         }
-        
     }
 
     private String convertStringDateToLong(String date){
