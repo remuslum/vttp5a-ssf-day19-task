@@ -41,6 +41,12 @@
                     <td th:text="${toDo.status}"></td>
                     <td th:text="${toDo.createdAt}"></td>
                     <td th:text="${toDo.updatedAt}"></td>
+                    <td>
+                        <a th:href="@{/edit/{toDo-id}(toDo-id=${toDo.id})}" class="btn btn-success">Edit</a>
+                    </td>
+                    <td>
+                        <a th:href="@{/delete/{toDo-id}(toDo-id=${toDo.id})}" class="btn btn-danger">Delete</a>
+                    </td>
                 </tr>
             </tbody>
         </table>

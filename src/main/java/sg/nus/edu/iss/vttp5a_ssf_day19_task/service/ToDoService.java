@@ -25,27 +25,33 @@ public class ToDoService {
     MapRepo mapRepo;
 
     public List<ToDo> getToDoListFromRedis(String redisKey){
-        LocalDateConverter localDateConverter = new LocalDateConverter();
         Map<String, String> entries = getEntries(Constants.REDISKEY);
         List<ToDo> toDoList = new ArrayList<>();
 
         for(Entry<String, String> entry:entries.entrySet()){
-            JsonReader jsonReader = Json.createReader(new StringReader(entry.getValue()));
-            JsonObject jsonObject = jsonReader.readObject();
-            System.out.println(jsonObject.getString("id"));
-            System.out.println(jsonObject.getString("name"));
-            System.out.println(jsonObject.getString("description"));
-
-
-            ToDo toDo = new ToDo(jsonObject.getString("id"),jsonObject.getString("name"), 
-            jsonObject.getString("description"), localDateConverter.convert(Long.parseLong(jsonObject.getString("due_date"))), 
-            jsonObject.getString("priority_value"), jsonObject.getString("status"), 
-            localDateConverter.convert(Long.parseLong(jsonObject.getString("created_at"))), 
-            localDateConverter.convert(Long.parseLong(jsonObject.getString("updated_at"))));
-
+            ToDo toDo = convertJSONtoToDo(entry.getValue());
             toDoList.add(toDo);
         }
         return toDoList;
+    }
+
+    public ToDo getToDo(String redisKey, String toDoID){
+        return convertJSONtoToDo(mapRepo.get(redisKey, toDoID));
+    }
+
+    private ToDo convertJSONtoToDo(String JSONString){
+        LocalDateConverter localDateConverter = new LocalDateConverter();
+
+        JsonReader jsonReader = Json.createReader(new StringReader(JSONString));
+        JsonObject jsonObject = jsonReader.readObject();
+
+        ToDo toDo = new ToDo(jsonObject.getString("id"),jsonObject.getString("name"), 
+        jsonObject.getString("description"), localDateConverter.convert(Long.parseLong(jsonObject.getString("due_date"))), 
+        jsonObject.getString("priority_value"), jsonObject.getString("status"), 
+        localDateConverter.convert(Long.parseLong(jsonObject.getString("created_at"))), 
+        localDateConverter.convert(Long.parseLong(jsonObject.getString("updated_at"))));
+
+        return toDo;
     }
 
     public List<ToDo> getFilteredList(String redisKey, String priority){
